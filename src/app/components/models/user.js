@@ -26,7 +26,7 @@ class User {
         });
     };
     static getAll (result) {
-        mysqlConnection.query("Select * from users", function (err, res) {
+        mysqlConnection.query("Select * from users ORDER BY name", function (err, res) {
             err ? result(err, null) : result(null, res);
         });
     }

@@ -17,6 +17,13 @@ mysqlConnection.connect(err => {
 
 const User = require('./app/components/models/user');
 
+app.use((req, res, next) => {         ///додано 
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET,POST');
+  res.header('Access-Control-Allow-Headers', 'authorization, Content-Type');
+  next();
+});
+
 app.use(passport.initialize());
 const options = {
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),

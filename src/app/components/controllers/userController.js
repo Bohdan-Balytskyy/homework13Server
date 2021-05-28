@@ -42,14 +42,14 @@ exports.update = async function (req, res) {
 exports.getAll = function (req, res) {
     User.getAll(function (err, record) {
         if (err) res.json(new Error1(err));
-        res.json(record);
+        res.status(200).json(record);
     });
 };
 
 exports.getById = function (req, res) {
   User.getById(req.params.id, function (err, record) {
-    if (err) res.status(200).json(new Error1(err));
-    res.json(record);
+    if (err) res.json(new Error1(err));
+    res.status(200).json(record);
   });
 };
 
