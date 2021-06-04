@@ -31,7 +31,8 @@ exports.signIn = async function (req, res) {
             }
         }
         catch (err) {
-            res.json({ code: err.name, description: err.message });
+            res.status(400).json({ code: err.name, description: err.message });
+            console.log(err);
         }
     }
 }
