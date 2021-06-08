@@ -1,3 +1,6 @@
+const dotenv = require('dotenv');
+dotenv.config();
+
 module.exports = {
-    key: 'dev-jwt'
+    key: process.env.key
 }

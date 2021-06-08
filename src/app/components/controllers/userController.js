@@ -1,20 +1,27 @@
 const User = require('../models/user');
 
-class Error1 {
+class CommonError {
     constructor(err) {
         this.code = err.name;
         this.description = err.message;
     }
 }
 
+class MyError {
+    constructor(description) {
+        this.code = 'myError';
+        this.description = description;
+    }
+}
+
 exports.create = async function (req, res) {
   if (req.body.constructor === Object && Object.keys(req.body).length < 3) {
-    res.status(400).json({ code: 'myError', description: 'Please provide all required field' });
+    res.status(400).json(new MyError('Please provide all required field'));
   } else {
     try {
       const checkAddYser = await User.checkEmail(req.body);
       if (checkAddYser[0]) {
-        res.status(400).json({ code: 'myError', description: 'User with this email has already existed' });
+        res.status(400).json(new MyError('User with this email has already existed'));
       } else {
         User.create(req.body, function (err, record) {
           res.status(201).json({ result: 'Ok' });
@@ -22,19 +29,19 @@ exports.create = async function (req, res) {
       }  
     }
     catch (err) {
-      res.json(new Error1(err));
+      res.json(new CommonError(err));
     }
   }
 };
 
 exports.update = async function (req, res) {
   if (req.body.constructor === Object && Object.keys(req.body).length < 3) {
-    res.status(400).json({ code: 'myError', description: 'Please provide all required field' });
+    res.status(400).json(new MyError('Please provide all required field'));
   } else {
     try {
       const checkPutUser = await User.checkEmail(req.body);
       if (checkPutUser[0] && (checkPutUser[0].id !== +req.params.id)) {
-        res.status(400).json({ code: 'myError', description: 'User with this changed email has already existed'});
+        res.status(400).json(new MyError('User with this changed email has already existed'));
       } else {
         User.update(req.params.id, req.body, function (err, record) {
           res.status(200).json({ result: 'Ok' });
@@ -42,7 +49,7 @@ exports.update = async function (req, res) {
       }
     }
     catch (err) {
-      res.json(new Error1(err));
+      res.json(new CommonError(err));
     }
   }
 };
@@ -54,7 +61,7 @@ exports.getAll = function (req, res) {
     });
   }  
   catch (err) {
-      res.json(new Error1(err));
+      res.json(new CommonError(err));
   }
 };
 
@@ -65,7 +72,7 @@ exports.getById = function (req, res) {
     });
   }
   catch (err) {
-    res.json(new Error1(err));
+    res.json(new CommonError(err));
   }
 };
 
@@ -76,6 +83,6 @@ exports.delete = function (req, res) {
     });
   }
     catch (err) {
-    res.json(new Error1(err));
+    res.json(new CommonError(err));
   }
 };
