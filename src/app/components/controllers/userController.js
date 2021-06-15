@@ -15,7 +15,8 @@ class MyError {
 }
 
 exports.create = async function (req, res) {
-  if (req.body.constructor === Object && Object.keys(req.body).length < 3) {
+  if (!req.body.hasOwnProperty('password') || !req.body.hasOwnProperty('email')
+  || !req.body.hasOwnProperty('name') || !req.body.hasOwnProperty('role')) {
     res.status(400).json(new MyError('Please provide all required field'));
   } else {
     try {
@@ -35,7 +36,8 @@ exports.create = async function (req, res) {
 };
 
 exports.update = async function (req, res) {
-  if (req.body.constructor === Object && Object.keys(req.body).length < 3) {
+  if (!req.body.hasOwnProperty('password') || !req.body.hasOwnProperty('email')
+  || !req.body.hasOwnProperty('name') || !req.body.hasOwnProperty('role')) {
     res.status(400).json(new MyError('Please provide all required field'));
   } else {
     try {
@@ -86,3 +88,17 @@ exports.delete = function (req, res) {
     res.json(new CommonError(err));
   }
 };
+exports.patch = function (req, res) {
+  if (!req.body.hasOwnProperty('name') || !req.body.hasOwnProperty('permissions')) {
+    res.status(400).json(new MyError('Please provide all required field'));
+  } else {
+    try {
+      User.patch(req.params.id, req.body, function (err, record) {
+        res.status(200).json({ result: 'Ok' });
+      });
+    }
+    catch (err) {
+      res.json(new CommonError(err));
+    }
+  }
+}
